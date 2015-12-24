@@ -240,12 +240,12 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   hratiogerr->SetFillColor(0);
   hratiogerr->SetFillStyle(0);
 
-    ratiogerr->SetFillColor(14);
-    ratiogerr->SetMarkerSize(0);
-    ratiogerr->SetLineWidth(1504);
-    ratiogerr->SetLineColor(0);
-    //ratiogerr->SetFillStyle(3004);
-    ratiogerr->SetFillStyle(3445);
+  ratiogerr->SetFillColor(14);
+  ratiogerr->SetMarkerSize(0);
+  ratiogerr->SetLineWidth(1504);
+  ratiogerr->SetLineColor(0);
+  //ratiogerr->SetFillStyle(3004);
+  ratiogerr->SetFillStyle(3445);
     
   ratio->GetXaxis()->SetLabelSize(0.15);
   ratio->GetXaxis()->SetLabelOffset(0.03);
@@ -295,15 +295,15 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   if (hdata_obs->GetMaximum()>ymax) ymax=hdata_obs->GetMaximum();
 
   if (manual_max<0) {
-  if(logy) {
-    hbg_pred->SetMaximum(1000*ymax);
-    hbg_pred->SetMinimum(0.07);
-  }
-  else {
-    hbg_pred->SetMinimum(0.00000001);
-    hbg_pred->SetMinimum(0);
-    hbg_pred->SetMaximum(1.5*ymax);
-  }
+    if(logy) {
+      hbg_pred->SetMaximum(1000*ymax);
+      hbg_pred->SetMinimum(0.07);
+    }
+    else {
+      hbg_pred->SetMinimum(0.00000001);
+      hbg_pred->SetMinimum(0);
+      hbg_pred->SetMaximum(1.5*ymax);
+    }
   }
   else {
     //    hbg_pred->SetMinimum(0.00000001);
