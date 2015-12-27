@@ -30,13 +30,16 @@ const double alpha = 1 - 0.6827;
 TString plotdir = "plots/";
 //const double predSF = 1.63947463;
 
-TGraphAsymmErrors* GetGDataObs(TH1D* hdata_obs) {
+TGraphAsymmErrors* GetGDataObs(TH1D* hdata_obs, bool suppress_zeroes=false, bool skip1=false) {
 
   int nbinsx=0;
-  for (int bin(0); bin<hdata_obs->GetNbinsX(); bin++) {
-    if (hdata_obs->GetBinContent(bin+1)>0) nbinsx++;
+  if (!suppress_zeroes) nbinsx=hdata_obs->GetNbinsX();
+  else {
+    for (int bin(0); bin<hdata_obs->GetNbinsX(); bin++) {
+      if (hdata_obs->GetBinContent(bin+1)>0) nbinsx++;
+    }
   }
-
+    
   const int nbins=nbinsx;
   
   Double_t x[nbins];
@@ -48,16 +51,30 @@ TGraphAsymmErrors* GetGDataObs(TH1D* hdata_obs) {
   Double_t data_pois_up[nbins];
   Double_t data_pois_down[nbins];
 
-  for (int bin(0); bin<nbins; bin++) {
-    x[bin] = hdata_obs->GetBinCenter(bin+1);
-    xl[bin]=hdata_obs->GetBinWidth(bin+1)/1000.;
-    xh[bin]=hdata_obs->GetBinWidth(bin+1)/1000.;
-    data_cv[bin]=hdata_obs->GetBinContent(bin+1);
-    double N=data_cv[bin];
-    double L =  (N==0) ? 0  : (ROOT::Math::gamma_quantile(alpha/2,N,1.));
-    double U =  (N==0) ? 0  : ROOT::Math::gamma_quantile_c(alpha/2,N+1,1) ;
-    data_pois_up[bin]=(U-N);
-    data_pois_down[bin]=(N-L);
+  if (skip1) {
+    for (int bin(1); bin<hdata_obs->GetNbinsX(); bin++) {
+      x[bin] = hdata_obs->GetBinCenter(bin+1);
+      xl[bin]=hdata_obs->GetBinWidth(bin+1)/1000.;
+      xh[bin]=hdata_obs->GetBinWidth(bin+1)/1000.;
+      data_cv[bin]=hdata_obs->GetBinContent(bin+1);
+      double N=data_cv[bin];
+      double L =  (N==0) ? 0  : (ROOT::Math::gamma_quantile(alpha/2,N,1.));
+      double U =  (N==0) ? 0  : ROOT::Math::gamma_quantile_c(alpha/2,N+1,1) ;
+      data_pois_up[bin]=(U-N);
+      data_pois_down[bin]=(N-L);
+    }
+  } else {
+    for (int bin(0); bin<nbins; bin++) {
+      x[bin] = hdata_obs->GetBinCenter(bin+1);
+      xl[bin]=hdata_obs->GetBinWidth(bin+1)/1000.;
+      xh[bin]=hdata_obs->GetBinWidth(bin+1)/1000.;
+      data_cv[bin]=hdata_obs->GetBinContent(bin+1);
+      double N=data_cv[bin];
+      double L =  (N==0) ? 0  : (ROOT::Math::gamma_quantile(alpha/2,N,1.));
+      double U =  ROOT::Math::gamma_quantile_c(alpha/2,N+1,1) ;
+      data_pois_up[bin]=(U-N);
+      data_pois_down[bin]=(N-L);
+    }
   }
 
   TGraphAsymmErrors* gdata_obs = new TGraphAsymmErrors(nbins, x, data_cv, xl, xh, data_pois_down, data_pois_up);
@@ -171,7 +188,8 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   hbg_pred->Add(hznn);
 
 
-  hbg_pred->Print("all");
+  //hbg_pred->Print("all");
+  gdata_obs->Print("all");
   gerr->Print("all");
 
 
@@ -190,6 +208,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
 
   gdata_obs->SetLineWidth(1);
   gdata_obs->SetMarkerStyle(20);
+  gdata_obs->SetMarkerSize(1.75);
   gdata_obs->SetLineColor(1);
   
   
@@ -230,6 +249,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   set_style(ratio, "data_obs");
   ratioderr->SetLineWidth(1);
   ratioderr->SetMarkerStyle(20);
+  ratioderr->SetMarkerSize(1.75);
   ratioderr->SetLineColor(1);
   hratiogerr->SetStats(0);
   ratio->SetTitle(hbg_pred->GetTitle());
@@ -278,7 +298,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   set_style(leg2,0.04);
   set_style(leg3,0.04);
   set_style(leg4,0.04);
-  legdata->AddEntry(hdata_obs, "Data", "pe");
+  legdata->AddEntry(gdata_obs, "Data", "pe");
   leg1->AddEntry(hlostlep, "#splitline{Lost}{lepton}", "f");
   leg2->AddEntry(hhadtau, "#splitline{Hadronic}{#tau lepton}", "f");
   leg3->AddEntry(hznn, "Z#rightarrow#nu#bar{#nu}", "f");
@@ -626,6 +646,37 @@ void Make1DProjections() {
   	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 250 GeV)",
   	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
   	   false, 60, "N_{jet} #geq 6", "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV");
+  
+  TH1D* hdata_obs_ht_MHT500_0b_7j = (TH1D*) f_data_obs->Get("hObsHT_MHT500_0b_7j");
+  TH1D* hlostlep_ht_MHT500_0b_7j = (TH1D*) f_lostlep->Get("hPredHT_MHT500_0b_7j");
+  TH1D* hhadtau_ht_MHT500_0b_7j = (TH1D*) f_hadtau->Get("hPredHT_MHT500_0b_7j");
+  TH1D* hqcd_ht_MHT500_0b_7j = (TH1D*) f_qcd->Get("hPredHT_MHT500_0b_7j");
+  TH1D* hznn_ht_MHT500_0b_7j = (TH1D*) f_znn->Get("hPredHT_MHT500_0b_7j");
+  TH1D* ht5qqqqVV_1400_100_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_1300_50_fast");
+  TH1D* ht5qqqqVV_1000_800_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_750_600_fast");
+  TGraphAsymmErrors* gbg_ht_MHT500_0b_7j = GetBGErr("HT_MHT500_0b_7j", hdata_obs_ht_MHT500_0b_7j, f_lostlep, f_hadtau, f_qcd, f_znn);
+  TGraphAsymmErrors* gdata_obs_ht_MHT500_0b_7j = GetGDataObs(hdata_obs_ht_MHT500_0b_7j);
+  MakePlot("T5qqqqVV-projection", gdata_obs_ht_MHT500_0b_7j, gbg_ht_MHT500_0b_7j, hdata_obs_ht_MHT500_0b_7j,
+	   hlostlep_ht_MHT500_0b_7j, hhadtau_ht_MHT500_0b_7j, hqcd_ht_MHT500_0b_7j, hznn_ht_MHT500_0b_7j,
+	   ht5qqqqVV_1400_100_ht_MHT500_0b_7j, ht5qqqqVV_1000_800_ht_MHT500_0b_7j,
+	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
+	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
+	   false, 35, "N_{jet} #geq 7", "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV"); 
+
+  TH1D* hdata_obs_ht_7j_0b = (TH1D*) f_data_obs->Get("hObsHT_7j_0b");
+  TH1D* hlostlep_ht_7j_0b = (TH1D*) f_lostlep->Get("hPredHT_7j_0b");
+  TH1D* hhadtau_ht_7j_0b = (TH1D*) f_hadtau->Get("hPredHT_7j_0b");
+  TH1D* hqcd_ht_7j_0b = (TH1D*) f_qcd->Get("hPredHT_7j_0b");
+  TH1D* hznn_ht_7j_0b = (TH1D*) f_znn->Get("hPredHT_7j_0b");
+  TH1D* ht5qqqqVV_1400_100_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_1250_300_fast");
+  TH1D* ht5qqqqVV_1000_800_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_750_600_fast");
+  TGraphAsymmErrors* gbg_ht_7j_0b = GetBGErr("HT_7j_0b", hdata_obs_ht_7j_0b, f_lostlep, f_hadtau, f_qcd, f_znn);
+  TGraphAsymmErrors* gdata_obs_ht_7j_0b = GetGDataObs(hdata_obs_ht_7j_0b);
+  MakePlot("T5qqqqVV-projection-v2", gdata_obs_ht_7j_0b, gbg_ht_7j_0b, hdata_obs_ht_7j_0b, hlostlep_ht_7j_0b, hhadtau_ht_7j_0b, hqcd_ht_7j_0b, hznn_ht_7j_0b,
+  	   ht5qqqqVV_1400_100_ht_7j_0b, ht5qqqqVV_1000_800_ht_7j_0b,
+  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
+  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
+  	   false, 80, "N_{jet} #geq 7", "N_{b-jet} = 0", "H_{T}^{miss} > 300 GeV");
   
   return;
   
