@@ -90,8 +90,8 @@ TGraphAsymmErrors* GetBGErr(TString graph_name, TH1D* hdata_obs, TFile* f_lostle
 
 }
 
-void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D* hhadtau, TH1D* hqcd, TH1D* hznn, 
-	      TH1D* ht1tttt_1500_100, TH1D* ht1tttt_1200_800, TH1D* ht1bbbb_1500_100, TH1D* ht1bbbb_1000_900, TH1D* ht1qqqq_1400_100, TH1D* ht1qqqq_1000_800,
+void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D* hhadtau, TH1D* hqcd, TH1D* hznn, 
+	      TH1D* h1, TH1D* h2,
 	      bool logy=false)
 {
 
@@ -105,7 +105,10 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   gerr->SetFillStyle(3445);
   
 
-
+  gdata_obs->SetMarkerSize(1);
+  gdata_obs->SetLineWidth(1);
+  gdata_obs->SetMarkerStyle(20);
+  gdata_obs->SetLineColor(1);
     
 
   //  cout << "Sum up the BGs" << endl;
@@ -131,73 +134,30 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   hbg_pred->SetFillColor(3002);
 
 
-  set_style(ht1tttt_1500_100,"data_obs");
-  ht1tttt_1500_100->SetLineColor(5000);
-  ht1tttt_1500_100->SetMarkerColor(5000);
-  ht1tttt_1500_100->SetMarkerStyle(20);
-  set_style(ht1tttt_1200_800,"data_obs");
-  ht1tttt_1200_800->SetLineColor(5000);
-  ht1tttt_1200_800->SetMarkerColor(5000);
-  ht1tttt_1200_800->SetMarkerStyle(24);
+  set_style(h1,"data_obs");
+  h1->SetLineColor(3004);
+  h1->SetMarkerColor(3004);
+  h1->SetMarkerStyle(20);
+  set_style(h2,"data_obs");
+  h2->SetLineColor(3004);
+  h2->SetMarkerColor(3004);
+  h2->SetMarkerStyle(24);
 
-  set_style(ht1bbbb_1500_100,"data_obs");
-  ht1bbbb_1500_100->SetLineColor(5002);
-  ht1bbbb_1500_100->SetMarkerColor(5002);
-  ht1bbbb_1500_100->SetMarkerStyle(21);
-  set_style(ht1bbbb_1000_900,"data_obs");
-  ht1bbbb_1000_900->SetLineColor(5002);
-  ht1bbbb_1000_900->SetMarkerColor(5002);
-  ht1bbbb_1000_900->SetMarkerStyle(25);
+  h1->Scale(2.153738/3);;
+  h2->Scale(2.153738/3);;
 
-  set_style(ht1qqqq_1400_100,"data_obs");
-  ht1qqqq_1400_100->SetLineColor(5004);
-  ht1qqqq_1400_100->SetMarkerColor(5004);
-  ht1qqqq_1400_100->SetMarkerStyle(22);
-  set_style(ht1qqqq_1000_800,"data_obs");
-  ht1qqqq_1000_800->SetLineColor(5004);
-  ht1qqqq_1000_800->SetMarkerColor(5004);
-  ht1qqqq_1000_800->SetMarkerStyle(26);
+  TH1D * q1 = (TH1D *) h1->Clone("q1");
+  TH1D * q2 = (TH1D *) h2->Clone("q2");
 
-  ht1tttt_1500_100->Scale(2.153738/3);;
-  ht1tttt_1200_800->Scale(2.153738/3);;
-  ht1bbbb_1500_100->Scale(2.153738/3);;
-  ht1bbbb_1000_900->Scale(2.153738/3);;
-  ht1qqqq_1400_100->Scale(2.153738/3);;
-  ht1qqqq_1000_800->Scale(2.153738/3);;
+  set_style(q1,"data_obs");
+  q1->SetLineColor(3004);
+  q1->SetMarkerColor(3004);
+  q1->SetMarkerStyle(20);
+  set_style(q2,"data_obs");
+  q2->SetLineColor(3004);
+  q2->SetMarkerColor(3004);
+  q2->SetMarkerStyle(24);
 
-  TH1D * q_t1tttt_1500_100 = (TH1D *) ht1tttt_1500_100->Clone("q_t1tttt_1500_100");
-  TH1D * q_t1tttt_1200_800 = (TH1D *) ht1tttt_1200_800->Clone("q_t1tttt_1200_800");
-  TH1D * q_t1bbbb_1500_100 = (TH1D *) ht1bbbb_1500_100->Clone("q_t1bbbb_1500_100");
-  TH1D * q_t1bbbb_1000_900 = (TH1D *) ht1bbbb_1000_900->Clone("q_t1bbbb_1000_900");
-  TH1D * q_t1qqqq_1400_100 = (TH1D *) ht1qqqq_1400_100->Clone("q_t1qqqq_1400_100");
-  TH1D * q_t1qqqq_1000_800 = (TH1D *) ht1qqqq_1000_800->Clone("q_t1qqqq_1000_800");
-
-  set_style(q_t1tttt_1500_100,"data_obs");
-  q_t1tttt_1500_100->SetLineColor(5000);
-  q_t1tttt_1500_100->SetMarkerColor(5000);
-  q_t1tttt_1500_100->SetMarkerStyle(20);
-  set_style(q_t1tttt_1200_800,"data_obs");
-  q_t1tttt_1200_800->SetLineColor(5000);
-  q_t1tttt_1200_800->SetMarkerColor(5000);
-  q_t1tttt_1200_800->SetMarkerStyle(24);
-
-  set_style(q_t1bbbb_1500_100,"data_obs");
-  q_t1bbbb_1500_100->SetLineColor(5002);
-  q_t1bbbb_1500_100->SetMarkerColor(5002);
-  q_t1bbbb_1500_100->SetMarkerStyle(21);
-  set_style(q_t1bbbb_1000_900,"data_obs");
-  q_t1bbbb_1000_900->SetLineColor(5002);
-  q_t1bbbb_1000_900->SetMarkerColor(5002);
-  q_t1bbbb_1000_900->SetMarkerStyle(25);
-
-  set_style(q_t1qqqq_1400_100,"data_obs");
-  q_t1qqqq_1400_100->SetLineColor(5004);
-  q_t1qqqq_1400_100->SetMarkerColor(5004);
-  q_t1qqqq_1400_100->SetMarkerStyle(22);
-  set_style(q_t1qqqq_1000_800,"data_obs");
-  q_t1qqqq_1000_800->SetLineColor(5004);
-  q_t1qqqq_1000_800->SetMarkerColor(5004);
-  q_t1qqqq_1000_800->SetMarkerStyle(26);
 
   htemp->SetStats(0);
   htemp->GetYaxis()->SetTitle("Q = 2[#sqrt{S+B}-#sqrt{B}]");
@@ -218,46 +178,34 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   qp3->SetLineStyle(2);
 
   for (Int_t bin = 0; bin < hbg_pred->GetNbinsX(); bin++) {
-    q_t1tttt_1500_100->SetBinContent(bin+1, GetQ(ht1tttt_1500_100->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
-    q_t1tttt_1500_100->SetBinError(bin+1, 0);
-    ht1tttt_1500_100->SetBinError(bin+1, 0);
-    q_t1tttt_1200_800->SetBinContent(bin+1, GetQ(ht1tttt_1200_800->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
-    q_t1tttt_1200_800->SetBinError(bin+1, 0);
-    ht1tttt_1200_800->SetBinError(bin+1, 0);
-    q_t1bbbb_1500_100->SetBinContent(bin+1, GetQ(ht1bbbb_1500_100->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
-    q_t1bbbb_1500_100->SetBinError(bin+1, 0);
-    ht1bbbb_1500_100->SetBinError(bin+1, 0);
-    q_t1bbbb_1000_900->SetBinContent(bin+1, GetQ(ht1bbbb_1000_900->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
-    q_t1bbbb_1000_900->SetBinError(bin+1, 0);
-    ht1bbbb_1000_900->SetBinError(bin+1, 0);
-    q_t1qqqq_1400_100->SetBinContent(bin+1, GetQ(ht1qqqq_1400_100->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
-    q_t1qqqq_1400_100->SetBinError(bin+1, 0);
-    ht1qqqq_1400_100->SetBinError(bin+1, 0);
-    q_t1qqqq_1000_800->SetBinContent(bin+1, GetQ(ht1qqqq_1000_800->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
-    q_t1qqqq_1000_800->SetBinError(bin+1, 0);
-    ht1qqqq_1000_800->SetBinError(bin+1, 0);
-
-    if (bin>23) printf("Bin %d: ll/tau/z/qcd = %3.3f/%3.3f/%3.3f/%3.3f -- S1(Q) / S2(Q) = %3.3f(%3.3f) / %3.3f(%3.3f)\n",
-		       bin+1, hlostlep->GetBinContent(bin+1), hhadtau->GetBinContent(bin+1), hznn->GetBinContent(bin+1), hqcd->GetBinContent(bin+1),
-		       ht1tttt_1500_100->GetBinContent(bin+1), q_t1tttt_1500_100->GetBinContent(bin+1), ht1tttt_1200_800->GetBinContent(bin+1), q_t1tttt_1200_800->GetBinContent(bin+1));
+    q1->SetBinContent(bin+1, GetQ(h1->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
+    q1->SetBinError(bin+1, 0);
+    h1->SetBinError(bin+1, 0);
+    q2->SetBinContent(bin+1, GetQ(h2->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
+    q2->SetBinError(bin+1, 0);
+    h2->SetBinError(bin+1, 0);
   }
  
   // Setup legends                                                                                                                                                                                                                                                         
   TLegend * leg1 = new TLegend(0.37, 0.5, 0.77, 0.77);
   set_style(leg1,0.025);
-  leg1->AddEntry(ht1tttt_1500_100, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1500 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
+  leg1->AddEntry(h1, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
   //leg1->AddEntry(ht1bbbb_1500_100, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1500 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
   // leg1->AddEntry(ht1qqqq_1400_100, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
 
   TLegend * leg2 = new TLegend(0.7, 0.5, 0.94, 0.77);
   set_style(leg2,0.025);
-  leg2->AddEntry(ht1tttt_1200_800, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1200 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
+  leg2->AddEntry(h2, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
   // leg2->AddEntry(ht1bbbb_1000_900, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 900 GeV)}", "p");
   // leg2->AddEntry(ht1qqqq_1000_800, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
 
-  TLegend * leg3 = new TLegend(0.7, 0.4, 0.94, 0.5);
+  TLegend * leg3 = new TLegend(0.7, 0.68, 0.94, 0.78);
   set_style(leg3,0.035);
   leg3->AddEntry(hbg_pred, "Total BG", "f");
+
+  TLegend * leg4 = new TLegend(0.37, 0.68, 0.74, 0.78);
+  set_style(leg4,0.035);
+  leg4->AddEntry(gdata_obs, "Data", "pes");
 
   
   double ymax = hbg_pred->GetMaximum();
@@ -336,14 +284,15 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
 
   hbg_pred->Draw("hist");
   gerr->Draw("2 same");
+  gdata_obs->Draw("p same");
   hbg_pred->GetYaxis()->SetLabelSize(0.035*1.15);
   hbg_pred->GetYaxis()->SetTitleSize(0.045*1.15);
   hbg_pred->GetYaxis()->SetTitleOffset(1);
   hbg_pred->GetYaxis()->SetTitleFont(42);
   hbg_pred->GetXaxis()->SetLabelSize(0);
   cout << "Draw hists..." << endl;
-  ht1tttt_1500_100->Draw("p,same");
-  ht1tttt_1200_800->Draw("p,same");
+  h1->Draw("p,same");
+  h2->Draw("p,same");
   // ht1bbbb_1500_100->Draw("p,same");
   // ht1bbbb_1000_900->Draw("p,same");
   // ht1qqqq_1400_100->Draw("p,same");
@@ -413,6 +362,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   leg1->Draw();
   leg2->Draw();
   leg3->Draw();
+  leg4->Draw();
   TLatex * latex = new TLatex();
   latex->SetNDC();
   latex->SetTextAlign(12);
@@ -445,7 +395,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   pad2->cd();
   pad2->SetGridy(0);
 
-  htemp->SetMaximum(1.85);
+  htemp->SetMaximum(2.2);
   htemp->SetMinimum(0);
     
   htemp->Draw("axis");
@@ -453,8 +403,8 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   htemp->GetXaxis()->SetLabelSize(0.12);
   hbg_pred->GetXaxis()->SetTitleSize(0.12);
   htemp->GetXaxis()->SetLabelSize(0.12);
-  q_t1tttt_1500_100->Draw("p same");
-  q_t1tttt_1200_800->Draw("p, same");
+  q1->Draw("p same");
+  q2->Draw("p, same");
   // q_t1bbbb_1500_100->Draw("p, same");
   // q_t1bbbb_1000_900->Draw("p, same");
   // q_t1qqqq_1400_100->Draw("p, same");
@@ -467,21 +417,21 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D*
   //  hratiogerr->Draw("e2");
 
 
-  q_t1tttt_1500_100->GetXaxis()->SetLabelSize(font_size_dw);
-  q_t1tttt_1500_100->GetXaxis()->SetTitleSize(font_size_dw);
-  q_t1tttt_1500_100->GetYaxis()->SetLabelSize(font_size_dw);
-  q_t1tttt_1500_100->GetYaxis()->SetTitleSize(font_size_dw);
+  q1->GetXaxis()->SetLabelSize(font_size_dw);
+  q1->GetXaxis()->SetTitleSize(font_size_dw);
+  q1->GetYaxis()->SetLabelSize(font_size_dw);
+  q1->GetYaxis()->SetTitleSize(font_size_dw);
 
-  q_t1tttt_1500_100->GetXaxis()->SetTitleSize(0.12);
-  q_t1tttt_1500_100->GetXaxis()->SetTitleOffset(1.1);
-  q_t1tttt_1500_100->GetXaxis()->SetTitleFont(42);
-  q_t1tttt_1500_100->GetYaxis()->SetTitleSize(0.13);
-  q_t1tttt_1500_100->GetYaxis()->SetTitleOffset(0.32);
-  q_t1tttt_1500_100->GetYaxis()->SetTitleFont(42);
-  q_t1tttt_1500_100->GetXaxis()->SetTitle("Search region bin number");
-  q_t1tttt_1500_100->GetYaxis()->SetNdivisions(505);
-  q_t1tttt_1500_100->GetYaxis()->SetTickLength(0.015);
-  q_t1tttt_1500_100->GetXaxis()->SetTickLength(0.08);
+  q1->GetXaxis()->SetTitleSize(0.12);
+  q1->GetXaxis()->SetTitleOffset(1.1);
+  q1->GetXaxis()->SetTitleFont(42);
+  q1->GetYaxis()->SetTitleSize(0.13);
+  q1->GetYaxis()->SetTitleOffset(0.32);
+  q1->GetYaxis()->SetTitleFont(42);
+  q1->GetXaxis()->SetTitle("Search region bin number");
+  q1->GetYaxis()->SetNdivisions(505);
+  q1->GetYaxis()->SetTickLength(0.015);
+  q1->GetXaxis()->SetTickLength(0.08);
   hbg_pred->GetXaxis()->SetTitleSize(0.12);
 
 
@@ -554,24 +504,22 @@ void MakeSignalQPlot() {
   TFile* f_qcd = new TFile("bg_hists/qcd_hists.root", "read");
   TFile* f_znn = new TFile("bg_hists/znn_hists.root", "read");
   TFile* f_sig = new TFile("signal_hists/RA2bin_signal.root", "read");
+  TFile* f_data_obs = new TFile("data_hists/data_hists.root", "read");
 
 
   TH1D* hqcd = (TH1D*) f_qcd->Get("hPredAllBins");
   TH1D* hlostlep = (TH1D*) f_lostlep->Get("hPredAllBins");
   TH1D* hhadtau = (TH1D*) f_hadtau->Get("hPredAllBins");
   TH1D* hznn = (TH1D*) f_znn->Get("hPredAllBins");
+  TH1D* hdata_obs = (TH1D*) f_data_obs->Get("hObsAllBins");
   
   hlostlep->Sumw2();
   hhadtau->Sumw2();
   hqcd->Sumw2();
   hznn->Sumw2();
 
-  TH1D* ht1tttt_1500_100 = (TH1D*) f_sig->Get("RA2bin_T1tttt_1500_100_fast");
-  TH1D* ht1tttt_1200_800 = (TH1D*) f_sig->Get("RA2bin_T1tttt_1200_800_fast");
-  TH1D* ht1bbbb_1500_100 = (TH1D*) f_sig->Get("RA2bin_T1bbbb_1500_100_fast");
-  TH1D* ht1bbbb_1000_900 = (TH1D*) f_sig->Get("RA2bin_T1bbbb_1000_900_fast");
-  TH1D* ht1qqqq_1400_100 = (TH1D*) f_sig->Get("RA2bin_T1qqqq_1400_800_fast");
-  TH1D* ht1qqqq_1000_800 = (TH1D*) f_sig->Get("RA2bin_T1qqqq_1000_800_fast");
+  TH1D* ht5qqqqVV_1400_100 = (TH1D*) f_sig->Get("RA2bin_T5qqqqVV_1400_100_fast");
+  TH1D* ht5qqqqVV_1000_800 = (TH1D*) f_sig->Get("RA2bin_T5qqqqVV_1000_800_fast");
 
   TGraphAsymmErrors* glostlepstat = (TGraphAsymmErrors*) f_lostlep->Get("Graph;2");
   TGraphAsymmErrors* ghadtaustat = (TGraphAsymmErrors*) f_hadtau->Get("Graph;2");
@@ -587,6 +535,12 @@ void MakeSignalQPlot() {
   Double_t x[72];
   Double_t xl[72];
   Double_t xh[72];
+  Double_t xld[72];
+  Double_t xhd[72];
+  
+  Double_t data_cv[72];
+  Double_t data_pois_up[72];
+  Double_t data_pois_down[72];
 
   Double_t pred_cv[72];
   Double_t full_stat_up[72];
@@ -600,6 +554,15 @@ void MakeSignalQPlot() {
     x[bin] = bin+1;
     xl[bin]=0.5;
     xh[bin]=0.5;
+    xld[bin]=0.1;
+    xhd[bin]=0.1;
+    
+    data_cv[bin]=hdata_obs->GetBinContent(bin+1);
+    double N=data_cv[bin];
+    double L =  (N==0) ? 0  : (ROOT::Math::gamma_quantile(alpha/2,N,1.));
+    double U =  (N==0) ? 0  : ROOT::Math::gamma_quantile_c(alpha/2,N+1,1) ;
+    data_pois_up[bin]=(U-N);
+    data_pois_down[bin]=(N-L);
 
     pred_cv[bin]=glostlepstat->Eval(bin+1)+ghadtaustat->Eval(bin+1)+gqcdstat->Eval(bin+1)+gznnstat->Eval(bin+1);
     double wtop_stat_up = sqrt(pow(glostlepstat->GetErrorYhigh(bin)+ghadtaustat->GetErrorYhigh(bin),2.));
@@ -611,12 +574,13 @@ void MakeSignalQPlot() {
     full_err_up[bin] = sqrt(pow(full_stat_up[bin], 2.)+pow(full_syst_up[bin], 2.));
     full_err_down[bin] = sqrt(pow(full_stat_down[bin], 2.)+pow(full_syst_down[bin], 2.));
   }
+  TGraphAsymmErrors* gdata_obs = new TGraphAsymmErrors(72, x, data_cv, xld, xhd, data_pois_down, data_pois_up);
   TGraphAsymmErrors* gbg = new TGraphAsymmErrors(72, x, pred_cv, xl, xh, full_err_down, full_err_up);
   
   outfile = new TFile("test.root","recreate");
 
   cout << "Make plots..." << endl;
-  MakePlot("bins_all_signal_BG_data-v3-qtttt-only", gbg, hlostlep, hhadtau, hqcd, hznn, ht1tttt_1500_100, ht1tttt_1200_800, ht1bbbb_1500_100, ht1bbbb_1000_900, ht1qqqq_1400_100, ht1qqqq_1000_800, true);
+  MakePlot("bins_all_signal_BG_data-v3-qqqqVV-only", gdata_obs, gbg, hlostlep, hhadtau, hqcd, hznn, ht5qqqqVV_1400_100, ht5qqqqVV_1000_800, true);
 
   cout << gStyle->GetHatchesSpacing() << endl;
   cout << gStyle->GetHatchesLineWidth() << endl;

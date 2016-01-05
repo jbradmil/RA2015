@@ -442,6 +442,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   cout << "Cut length: " << cut.Length() << endl;
   if (cut.Length()<20) latex->DrawLatex(0.77, 0.49, cut);
   else if (cut.Length()<35) latex->DrawLatex(0.6, 0.49, cut);
+  else if (cut.Length()<40) latex->DrawLatex(0.44, 0.49, cut);
   else latex->DrawLatex(0.27, 0.49, cut);
   latex->SetTextSize(0.052);
 
@@ -652,13 +653,13 @@ void Make1DProjections() {
   TH1D* hhadtau_ht_MHT500_0b_7j = (TH1D*) f_hadtau->Get("hPredHT_MHT500_0b_7j");
   TH1D* hqcd_ht_MHT500_0b_7j = (TH1D*) f_qcd->Get("hPredHT_MHT500_0b_7j");
   TH1D* hznn_ht_MHT500_0b_7j = (TH1D*) f_znn->Get("hPredHT_MHT500_0b_7j");
-  TH1D* ht5qqqqVV_1400_100_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_1300_50_fast");
+  TH1D* ht5qqqqVV_1300_50_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_1300_50_fast");
   TH1D* ht5qqqqVV_1000_800_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_750_600_fast");
   TGraphAsymmErrors* gbg_ht_MHT500_0b_7j = GetBGErr("HT_MHT500_0b_7j", hdata_obs_ht_MHT500_0b_7j, f_lostlep, f_hadtau, f_qcd, f_znn);
   TGraphAsymmErrors* gdata_obs_ht_MHT500_0b_7j = GetGDataObs(hdata_obs_ht_MHT500_0b_7j);
   MakePlot("T5qqqqVV-projection", gdata_obs_ht_MHT500_0b_7j, gbg_ht_MHT500_0b_7j, hdata_obs_ht_MHT500_0b_7j,
 	   hlostlep_ht_MHT500_0b_7j, hhadtau_ht_MHT500_0b_7j, hqcd_ht_MHT500_0b_7j, hznn_ht_MHT500_0b_7j,
-	   ht5qqqqVV_1400_100_ht_MHT500_0b_7j, ht5qqqqVV_1000_800_ht_MHT500_0b_7j,
+	   ht5qqqqVV_1300_50_ht_MHT500_0b_7j, ht5qqqqVV_1000_800_ht_MHT500_0b_7j,
 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
 	   false, 35, "N_{jet} #geq 7", "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV"); 
@@ -668,15 +669,31 @@ void Make1DProjections() {
   TH1D* hhadtau_ht_7j_0b = (TH1D*) f_hadtau->Get("hPredHT_7j_0b");
   TH1D* hqcd_ht_7j_0b = (TH1D*) f_qcd->Get("hPredHT_7j_0b");
   TH1D* hznn_ht_7j_0b = (TH1D*) f_znn->Get("hPredHT_7j_0b");
-  TH1D* ht5qqqqVV_1400_100_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_1250_300_fast");
+  TH1D* ht5qqqqVV_1300_50_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_1250_300_fast");
   TH1D* ht5qqqqVV_1000_800_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_750_600_fast");
   TGraphAsymmErrors* gbg_ht_7j_0b = GetBGErr("HT_7j_0b", hdata_obs_ht_7j_0b, f_lostlep, f_hadtau, f_qcd, f_znn);
   TGraphAsymmErrors* gdata_obs_ht_7j_0b = GetGDataObs(hdata_obs_ht_7j_0b);
   MakePlot("T5qqqqVV-projection-v2", gdata_obs_ht_7j_0b, gbg_ht_7j_0b, hdata_obs_ht_7j_0b, hlostlep_ht_7j_0b, hhadtau_ht_7j_0b, hqcd_ht_7j_0b, hznn_ht_7j_0b,
-  	   ht5qqqqVV_1400_100_ht_7j_0b, ht5qqqqVV_1000_800_ht_7j_0b,
+  	   ht5qqqqVV_1300_50_ht_7j_0b, ht5qqqqVV_1000_800_ht_7j_0b,
   	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
   	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
   	   false, 80, "N_{jet} #geq 7", "N_{b-jet} = 0", "H_{T}^{miss} > 300 GeV");
+
+  TH1D* hdata_obs_NJets_0b = (TH1D*) f_data_obs->Get("hObsNJets_0b");
+  TH1D* hlostlep_NJets_0b = (TH1D*) f_lostlep->Get("hPredNJets_0b");
+  TH1D* hhadtau_NJets_0b = (TH1D*) f_hadtau->Get("hPredNJets_0b");
+  TH1D* hqcd_NJets_0b = (TH1D*) f_qcd->Get("hPredNJets_0b");
+  TH1D* hznn_NJets_0b = (TH1D*) f_znn->Get("hPredNJets_0b");
+  TH1D* ht5qqqqVV_1300_50_NJets_0b = (TH1D*) f_sig->Get("hPredNJets_nb-1-1_box-7-11_RA2bin_T5qqqqVV_1300_50_fast");
+  TH1D* ht5qqqqVV_1000_800_NJets_0b = (TH1D*) f_sig->Get("hPredNJets_nb-1-1_box-7-11_RA2bin_T5qqqqVV_750_600_fast");
+  TGraphAsymmErrors* gbg_NJets_0b = GetBGErr("NJets_0b", hdata_obs_NJets_0b, f_lostlep, f_hadtau, f_qcd, f_znn);
+  TGraphAsymmErrors* gdata_obs_NJets_0b = GetGDataObs(hdata_obs_NJets_0b);
+  MakePlot("T5qqqqVV-projection-v3", gdata_obs_NJets_0b, gbg_NJets_0b, hdata_obs_NJets_0b,
+	   hlostlep_NJets_0b, hhadtau_NJets_0b, hqcd_NJets_0b, hznn_NJets_0b,
+	   ht5qqqqVV_1300_50_NJets_0b, ht5qqqqVV_1000_800_NJets_0b,
+	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
+	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
+	   false, 200, "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV"); 
   
   return;
   
