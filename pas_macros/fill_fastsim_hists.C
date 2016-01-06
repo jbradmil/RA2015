@@ -33,7 +33,7 @@ void fill_fastsim_hists() {
 
   TFile* outfile = new TFile("signal_hists/fastsim_signal.root", "recreate");
 
-  double SF=2.153738/3.;
+  double SF=2.262/3.;
    
   int ind(0);
   //double nb3_max(0.);

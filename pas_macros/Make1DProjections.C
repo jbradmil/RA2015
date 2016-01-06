@@ -448,8 +448,8 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
 
 
   // Luminosity information for scaling
-  double lumi     = 2.153738; // normaliza to this lumi (fb-1)
-  //  double lumi_ref = 2.109271; // normaliza to 3 (fb-1)
+  double lumi     = 2.262; // normaliza to this lumi (fb-1)
+  //  double lumi_ref = 2.262; // normaliza to 3 (fb-1)
 
   char tempname[200];
   TString line = "";
@@ -616,7 +616,7 @@ void Make1DProjections() {
 	   ht1bbbb_1500_100_mht_3b, ht1bbbb_1000_900_mht_3b,
 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 900 GeV, m_{#tilde{#chi}_{1}^{0}} = 700 GeV)",
-	   false, 70, "N_{b-jet} #geq 3");
+	   false, 85, "N_{b-jet} #geq 3");
  
   TH1D* hdata_obs_mht_9j_2b = (TH1D*) f_data_obs->Get("hObsMHT_9j_2b");
   TH1D* hlostlep_mht_9j_2b = (TH1D*) f_lostlep->Get("hPredMHT_9j_2b");

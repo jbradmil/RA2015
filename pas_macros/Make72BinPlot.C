@@ -324,8 +324,8 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   latex->SetTextSize(0.052);
 
   // Luminosity information for scaling
-  double lumi     = 2.153738; // normaliza to this lumi (fb-1)
-  double lumi_ref = 2.153738; // normaliza to 3 (fb-1)
+  double lumi     = 2.262; // normaliza to this lumi (fb-1)
+  double lumi_ref = 2.262; // normaliza to 3 (fb-1)
 
   char tempname[200];
   TString line = "";
