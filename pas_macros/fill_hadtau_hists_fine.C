@@ -29,7 +29,7 @@ void fill_hadtau_hists_fine() {
   TH1::SetDefaultSumw2(1);
   //gROOT->SetBatch(1);
 
-  TFile* infile_fine = new TFile("bg_hists/HadTauEstimation_data_formatted_PlusRareProcess.root", "read");
+  TFile* infile_fine = new TFile("bg_hists/HadTauEstimation.root", "read");
   TH1D* hin = (TH1D*)infile_fine->Get("QCDBin_HiDphi_nominal");
   TH1D* hin_wpoisson = (TH1D*)infile_fine->Get("QCDBin_HiDphi_nominal_fullstatuncertainty");
   TH1D* hin_closure = (TH1D*)infile_fine->Get("QCDBin_HiDphi_closureUncertainty");

@@ -31,7 +31,7 @@ void fill_lostlep_hists_fine() {
   TH1::SetDefaultSumw2(1);
   //gROOT->SetBatch(1);
 
-  TFile* infile_fine = new TFile("bg_hists/LLPrediction_QCD_HDP_Dez08.root", "read");
+  TFile* infile_fine = new TFile("bg_hists/LLPrediction_fine.root", "read");
   TH1D* hin = (TH1D*)infile_fine->Get("Prediction_data/totalPred_LL");
   TH1D* hsystup = (TH1D*)infile_fine->Get("AdditionalContent/totalPropSysUp_LL");
   TH1D* hsystdown = (TH1D*)infile_fine->Get("AdditionalContent/totalPropSysDown_LL");

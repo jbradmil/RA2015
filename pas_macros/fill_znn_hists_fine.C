@@ -32,7 +32,7 @@ void fill_znn_hists_fine() {
   TH1::SetDefaultSumw2(1);
   //gROOT->SetBatch(1);
 
-  TFile* infile_fine = new TFile("bg_hists/ZinvHistos_hdp.root", "read");
+  TFile* infile_fine = new TFile("bg_hists/ZinvHistos_fine.root", "read");
   TH1D* hin = (TH1D*)infile_fine->Get("ZinvBGpred");
   TH1D* hin_systup = (TH1D*)infile_fine->Get("ZinvBGsysUp");
   TH1D* hin_0evt_statup = (TH1D*)infile_fine->Get("ZinvBG0EVsysUp");
