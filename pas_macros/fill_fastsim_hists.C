@@ -46,7 +46,10 @@ void fill_fastsim_hists() {
     TString hname = Form("%s", hin->GetName());
     // hin->Print("all");
     cout << hname << endl;
-
+      TH1D* hMHT = MakeMHTProjection(hin);
+      hMHT->SetName(Form("%s_%s", hMHT->GetName(), hname.Data()));
+      hMHT->Scale(SF);
+      hMHT->Write();
     if (hname.Contains("bbbb")) {
       TH1D* hMHT_3b = MakeMHTProjection(hin, 0, 4, 3, 3);
       hMHT_3b->SetName(Form("%s_%s", hMHT_3b->GetName(), hname.Data()));
@@ -90,6 +93,10 @@ void fill_fastsim_hists() {
       hNJets_2b->SetName(Form("%s_%s", hNJets_2b->GetName(), hname.Data()));
       hNJets_2b->Scale(SF);
       hNJets_2b->Write();
+      TH1D* hHT_5j_2b = MakeHTProjection(hin, 1, 4, 2, 3);
+      hHT_5j_2b->SetName(Form("%s_%s", hHT_5j_2b->GetName(), hname.Data()));
+      hHT_5j_2b->Scale(SF);
+      hHT_5j_2b->Write();
     }    
     //outfile->cd();
 

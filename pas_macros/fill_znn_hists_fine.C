@@ -272,6 +272,7 @@ TH1D* hPredNJets = MakeNJetsProjection(hPredFineBins);
   TGraphAsymmErrors* gMHT_9j_3bSyst = MakeMHTProjection(hPredAllBins, hPredFineBins, gAllSyst, gSyst, 4, 4, 3, 3);
   gMHT_9j_3bSyst->Write("gMHT_9j_3bSyst");
 
+
   TH1D* hPredHT_7j_0b = MakeHTProjection(hPredFineBins, 3, 4, 0, 0, 1, 3);
   hPredHT_7j_0b->Write("hPredHT_7j_0b");
 
@@ -293,6 +294,16 @@ TH1D* hPredNJets = MakeNJetsProjection(hPredFineBins);
   gNJets_0b_MHT500Stat->Write("gNJets_0b_MHT500Stat");
   TGraphAsymmErrors* gNJets_0b_MHT500Syst = MakeNJetsProjectionV2(hPredFineBins, gSyst, 0, 0, 6, 10);
   gNJets_0b_MHT500Syst->Write("gNJets_0b_MHT500Syst");
+
+  TH1D* hPredHT_5j_2b = MakeHTProjection(hPredFineBins, 1, 4, 2, 3, 0, 3);
+  hPredHT_5j_2b->Write("hPredHT_5j_2b");
+
+  TGraphAsymmErrors* gHT_5j_2bFull = MakeHTProjection(hPredFineBins, gFull, 1, 4, 2, 3, 0, 3);
+  gHT_5j_2bFull->Write("gHT_5j_2bFull");
+  TGraphAsymmErrors* gHT_5j_2bStat = MakeHTProjection(hPredFineBins, gStat, 1, 4, 2, 3, 0, 3);
+  gHT_5j_2bStat->Write("gHT_5j_2bStat");
+  TGraphAsymmErrors* gHT_5j_2bSyst = MakeHTProjection(hPredFineBins, gSyst, 1, 4, 2, 3, 0, 3);
+  gHT_5j_2bSyst->Write("gHT_5j_2bSyst");
   
   outfile->Close();
 

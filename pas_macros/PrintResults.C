@@ -210,8 +210,10 @@ void PrintResults() {
 	   gznnstat->Eval(bin+1), gznnstat->GetErrorYhigh(bin), gznnsyst->GetErrorYhigh(bin), gznnstat->GetErrorYlow(bin), gznnsyst->GetErrorYlow(bin),
 	   gqcdstat->Eval(bin+1), gqcdstat->GetErrorYhigh(bin), gqcdsyst->GetErrorYhigh(bin), gqcdstat->GetErrorYlow(bin), gqcdsyst->GetErrorYlow(bin),
 	    pred_cv[bin], full_stat_up[bin], full_syst_up[bin], full_stat_down[bin], full_syst_down[bin], (int)hdata_obs->GetBinContent(bin+1));
-  printf("%d | %f + %f + %f - %f - %f\n", bin+1,
-	 pred_cv[bin], full_stat_up[bin], full_syst_up[bin], full_stat_down[bin], full_syst_down[bin]);
+    // printf("%d | %f + %f + %f - %f - %f\n", bin+1,
+    //	 pred_cv[bin], full_stat_up[bin], full_syst_up[bin], full_stat_down[bin], full_syst_down[bin]);
+        printf("%d, %f\n", bin+1, glostlepstat->Eval(bin+1));
+
   }
   PrintTableTrailer();
 
@@ -244,8 +246,9 @@ void PrintResults() {
 	   gznnstat->Eval(bin+1), gznnstat->GetErrorYhigh(bin), gznnsyst->GetErrorYhigh(bin), gznnstat->GetErrorYlow(bin), gznnsyst->GetErrorYlow(bin),
 	   gqcdstat->Eval(bin+1), gqcdstat->GetErrorYhigh(bin), gqcdsyst->GetErrorYhigh(bin), gqcdstat->GetErrorYlow(bin), gqcdsyst->GetErrorYlow(bin),
 	    pred_cv[bin], full_stat_up[bin], full_syst_up[bin], full_stat_down[bin], full_syst_down[bin], (int)hdata_obs->GetBinContent(bin+1));
-  printf("%d | %f + %f + %f - %f - %f\n", bin+1,
-	 pred_cv[bin], full_stat_up[bin], full_syst_up[bin], full_stat_down[bin], full_syst_down[bin]);
+    //printf("%d | %f + %f + %f - %f - %f\n", bin+1,
+    //	 pred_cv[bin], full_stat_up[bin], full_syst_up[bin], full_stat_down[bin], full_syst_down[bin]);
+    printf("%d, %f\n", bin+1, glostlepstat->Eval(bin+1));
   }
 
 

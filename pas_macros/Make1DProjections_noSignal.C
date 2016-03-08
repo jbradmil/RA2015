@@ -149,7 +149,8 @@ TGraphAsymmErrors* GetBGErr(TString graph_name, TH1D* hdata_obs, TFile* f_lostle
 
 }
 
-void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmErrors* gerr, TH1D* hdata_obs, TH1D* hlostlep, TH1D* hhadtau, TH1D* hqcd, TH1D* hznn, TH1D* hsig1, TH1D* hsig2, TString siglabel, TString siglabel2, /*TH1D* hsig2, TH1D* hsig3,*/ bool logy=false, double manual_max=-1., TString cut1="", TString cut2="", TString cut3="")
+void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmErrors* gerr, TH1D* hdata_obs, TH1D* hlostlep, TH1D* hhadtau, TH1D* hqcd, TH1D* hznn,
+	      bool logy=false, double manual_max=-1., TString cut1="", TString cut2="", TString cut3="")
 {
 
   hdata_obs->Sumw2();
@@ -160,18 +161,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   set_style_lite(hqcd, "qcd");
   set_style_lite(hznn, "znn");
   set_style(hdata_obs, "data_obs");
-  set_style_lite(hsig1, "single_top");
-  set_style_lite(hsig2, "single_top");
 
-
-  hsig1->SetLineWidth(3);
-  hsig1->SetLineColor(4);
-  hsig1->SetFillColor(0);
-
-  hsig2->SetLineWidth(4);
-  hsig2->SetLineStyle(7);
-  hsig2->SetLineColor(4);
-  hsig2->SetFillColor(0);
 
   //  cout << "Sum up the BGs" << endl;
   TH1D * hbg_pred = (TH1D*)hlostlep->Clone("bg_pred");
@@ -284,7 +274,6 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   TLegend * leg2;
   TLegend * leg3;
   TLegend * leg4;
-  TLegend * legsig;
 
   legdata = new TLegend(0.25-0.08, 0.75, 0.45-0.12, 0.85);
   leg1 = new TLegend(0.29, 0.756, 0.58, 0.85);
@@ -303,11 +292,6 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   leg2->AddEntry(hhadtau, "#splitline{Hadronic}{#tau lepton}", "f");
   leg3->AddEntry(hznn, "Z#rightarrow#nu#bar{#nu}", "f");
   leg4->AddEntry(hqcd, "QCD", "f");
-  legsig = new TLegend(0.17, 0.55, 0.65, 0.75);
-  set_style(legsig,0.04);
-  legsig->SetMargin(0.2);
-  legsig->AddEntry(hsig1, siglabel, "l");
-  legsig->AddEntry(hsig2, siglabel2, "l");
 
  
   double ymax = hbg_pred->GetMaximum();
@@ -406,7 +390,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
 
   hbg_pred->GetYaxis()->SetLabelSize(0.035*1.4);
   hbg_pred->GetYaxis()->SetTitleSize(0.04*1.34);
-  hbg_pred->GetYaxis()->SetTitleOffset(0.9);
+  hbg_pred->GetYaxis()->SetTitleOffset(1.2);
   hbg_pred->GetYaxis()->SetTitleFont(42);
   
   hs->Draw("hist,same");
@@ -418,8 +402,6 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   gdata_obs->SetMarkerStyle(20);
   gerr->Draw("2 same");
 
-  hsig1->Draw("hist, same");
-  hsig2->Draw("hist, same");
 
   gdata_obs->Draw("p same");
 
@@ -429,7 +411,6 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   leg2->Draw();
   leg3->Draw();
   leg4->Draw();
-  legsig->Draw();
   TLatex * latex = new TLatex();
   latex->SetNDC();
   latex->SetTextAlign(12);
@@ -561,7 +542,6 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   delete legdata;
   delete leg1;
   delete leg2;
-  delete legsig;
   delete latex;
   delete pave;
   delete canv;
@@ -574,7 +554,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
 
 
 
-void Make1DProjections() {
+void Make1DProjections_noSignal() {
 
   TH1::SetDefaultSumw2(1);
   //gROOT->SetBatch(1);
@@ -601,137 +581,18 @@ void Make1DProjections() {
   TFile* f_qcd = new TFile("bg_hists/qcd_hists_fine.root", "read");
   TFile* f_znn = new TFile("bg_hists/znn_hists_fine.root", "read");
   TFile* f_data_obs = new TFile("data_hists/data_hists_227.root", "read");
-  TFile* f_sig = new TFile("signal_hists/fastsim_signal.root", "read");
 
   TH1D* hdata_obs_mht = (TH1D*) f_data_obs->Get("hObsMHT");
   TH1D* hlostlep_mht = (TH1D*) f_lostlep->Get("hPredMHT");
   TH1D* hhadtau_mht = (TH1D*) f_hadtau->Get("hPredMHT");
   TH1D* hqcd_mht = (TH1D*) f_qcd->Get("hPredMHT");
   TH1D* hznn_mht = (TH1D*) f_znn->Get("hPredMHT");
-  TH1D* ht1bbbb_1500_100_mht = (TH1D*) f_sig->Get("hPredMHT_nj-1-5_nb-1-4_RA2bin_T1bbbb_1400_50_fast");
-  TH1D* ht1bbbb_1000_900_mht = (TH1D*) f_sig->Get("hPredMHT_nj-1-5_nb-1-4_RA2bin_T1bbbb_900_700_fast");
   TGraphAsymmErrors* gbg_mht = GetBGErr("MHT", hdata_obs_mht, f_lostlep, f_hadtau, f_qcd, f_znn);
   TGraphAsymmErrors* gdata_obs_mht = GetGDataObs(hdata_obs_mht);
-  MakePlot("T1bbbb-projection-allMHT-log", gdata_obs_mht, gbg_mht, hdata_obs_mht, hlostlep_mht, hhadtau_mht, hqcd_mht, hznn_mht,
-  	   ht1bbbb_1500_100_mht, ht1bbbb_1000_900_mht,
-  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 900 GeV, m_{#tilde{#chi}_{1}^{0}} = 700 GeV)",
-  	   true, 750550, "");
-
-  TH1D* ht1qqqq_1500_100_mht = (TH1D*) f_sig->Get("hPredMHT_nj-1-5_nb-1-4_RA2bin_T1qqqq_1300_250_fast");
-  TH1D* ht1qqqq_1000_900_mht = (TH1D*) f_sig->Get("hPredMHT_nj-1-5_nb-1-4_RA2bin_T1qqqq_750_600_fast");
-  MakePlot("T1qqqq-projection-allMHT", gdata_obs_mht, gbg_mht, hdata_obs_mht, hlostlep_mht, hhadtau_mht, hqcd_mht, hznn_mht,
-  	   ht1qqqq_1500_100_mht, ht1qqqq_1000_900_mht,
-  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 250 GeV)",
-  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  	   false, 4750, "");
+  MakePlot("T1bbbb-projection-allMHT", gdata_obs_mht, gbg_mht, hdata_obs_mht, hlostlep_mht, hhadtau_mht, hqcd_mht, hznn_mht,
+  	   false, 3500, "");
   
-  // TH1D* hdata_obs_mht_3b = (TH1D*) f_data_obs->Get("hObsMHT_3b");
-  // TH1D* hlostlep_mht_3b = (TH1D*) f_lostlep->Get("hPredMHT_3b");
-  // TH1D* hhadtau_mht_3b = (TH1D*) f_hadtau->Get("hPredMHT_3b");
-  // TH1D* hqcd_mht_3b = (TH1D*) f_qcd->Get("hPredMHT_3b");
-  // TH1D* hznn_mht_3b = (TH1D*) f_znn->Get("hPredMHT_3b");
-  // TH1D* ht1bbbb_1500_100_mht_3b = (TH1D*) f_sig->Get("hPredMHT_nj-1-5_nb-4-4_RA2bin_T1bbbb_1400_50_fast");
-  // TH1D* ht1bbbb_1000_900_mht_3b = (TH1D*) f_sig->Get("hPredMHT_nj-1-5_nb-4-4_RA2bin_T1bbbb_900_700_fast");
-  // TGraphAsymmErrors* gbg_mht_3b = GetBGErr("MHT_3b", hdata_obs_mht_3b, f_lostlep, f_hadtau, f_qcd, f_znn);
-  // TGraphAsymmErrors* gdata_obs_mht_3b = GetGDataObs(hdata_obs_mht_3b);
-  // MakePlot("T1bbbb-projection", gdata_obs_mht_3b, gbg_mht_3b, hdata_obs_mht_3b, hlostlep_mht_3b, hhadtau_mht_3b, hqcd_mht_3b, hznn_mht_3b,
-  // 	   ht1bbbb_1500_100_mht_3b, ht1bbbb_1000_900_mht_3b,
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 900 GeV, m_{#tilde{#chi}_{1}^{0}} = 700 GeV)",
-  // 	   false, 85, "N_{b-jet} #geq 3");
- 
-  // TH1D* hdata_obs_mht_9j_2b = (TH1D*) f_data_obs->Get("hObsMHT_9j_2b");
-  // TH1D* hlostlep_mht_9j_2b = (TH1D*) f_lostlep->Get("hPredMHT_9j_2b");
-  // TH1D* hhadtau_mht_9j_2b = (TH1D*) f_hadtau->Get("hPredMHT_9j_2b");
-  // TH1D* hqcd_mht_9j_2b = (TH1D*) f_qcd->Get("hPredMHT_9j_2b");
-  // TH1D* hznn_mht_9j_2b = (TH1D*) f_znn->Get("hPredMHT_9j_2b");
-  // TH1D* ht1tttt_1500_100_mht_9j_2b = (TH1D*) f_sig->Get("hPredMHT_nj-5-5_nb-3-4_RA2bin_T1tttt_1350_50_fast");
-  // TH1D* ht1tttt_1200_800_mht_9j_2b = (TH1D*) f_sig->Get("hPredMHT_nj-5-5_nb-3-4_RA2bin_T1tttt_1025_600_fast");
-  // TGraphAsymmErrors* gbg_mht_9j_2b = GetBGErr("MHT_9j_2b", hdata_obs_mht_9j_2b, f_lostlep, f_hadtau, f_qcd, f_znn);
-  // TGraphAsymmErrors* gdata_obs_mht_9j_2b = GetGDataObs(hdata_obs_mht_9j_2b);
-  // MakePlot("T1tttt-projection", gdata_obs_mht_9j_2b, gbg_mht_9j_2b, hdata_obs_mht_9j_2b, hlostlep_mht_9j_2b, hhadtau_mht_9j_2b, hqcd_mht_9j_2b, hznn_mht_9j_2b,
-  // 	   ht1tttt_1500_100_mht_9j_2b,  ht1tttt_1200_800_mht_9j_2b,
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1350 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1025 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  // 	   false, 30, "N_{jet} #geq 9", "N_{b-jet} #geq 2");
 
-  // TH1D* hdata_obs_ht_MHT500 = (TH1D*) f_data_obs->Get("hObsHT_MHT500");
-  // TH1D* hlostlep_ht_MHT500 = (TH1D*) f_lostlep->Get("hPredHT_MHT500");
-  // TH1D* hhadtau_ht_MHT500 = (TH1D*) f_hadtau->Get("hPredHT_MHT500");
-  // TH1D* hqcd_ht_MHT500 = (TH1D*) f_qcd->Get("hPredHT_MHT500");
-  // TH1D* hznn_ht_MHT500 = (TH1D*) f_znn->Get("hPredHT_MHT500");
-  // TH1D* ht1qqqq_1400_100_ht_MHT500 = (TH1D*) f_sig->Get("hPredHT_nj-3-5_nb-1-1_mht-3-4_RA2bin_T1qqqq_1300_250_fast");
-  // TH1D* ht1qqqq_1000_800_ht_MHT500 = (TH1D*) f_sig->Get("hPredHT_nj-3-5_nb-1-1_mht-3-4_RA2bin_T1qqqq_750_600_fast");
-  // TGraphAsymmErrors* gbg_ht_MHT500 = GetBGErr("HT_MHT500", hdata_obs_ht_MHT500, f_lostlep, f_hadtau, f_qcd, f_znn);
-  // TGraphAsymmErrors* gdata_obs_ht_MHT500 = GetGDataObs(hdata_obs_ht_MHT500);
-  // MakePlot("T1qqqq-projection", gdata_obs_ht_MHT500, gbg_ht_MHT500, hdata_obs_ht_MHT500, hlostlep_ht_MHT500, hhadtau_ht_MHT500, hqcd_ht_MHT500, hznn_ht_MHT500,
-  // 	   ht1qqqq_1400_100_ht_MHT500, ht1qqqq_1000_800_ht_MHT500,
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 250 GeV)",
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  // 	   false, 60, "N_{jet} #geq 6", "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV");
-  
-  // TH1D* hdata_obs_ht_MHT500_0b_7j = (TH1D*) f_data_obs->Get("hObsHT_MHT500_0b_7j");
-  // TH1D* hlostlep_ht_MHT500_0b_7j = (TH1D*) f_lostlep->Get("hPredHT_MHT500_0b_7j");
-  // TH1D* hhadtau_ht_MHT500_0b_7j = (TH1D*) f_hadtau->Get("hPredHT_MHT500_0b_7j");
-  // TH1D* hqcd_ht_MHT500_0b_7j = (TH1D*) f_qcd->Get("hPredHT_MHT500_0b_7j");
-  // TH1D* hznn_ht_MHT500_0b_7j = (TH1D*) f_znn->Get("hPredHT_MHT500_0b_7j");
-  // TH1D* ht5qqqqVV_1300_50_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_1300_50_fast");
-  // TH1D* ht5qqqqVV_1000_800_ht_MHT500_0b_7j = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-3-4_RA2bin_T5qqqqVV_750_600_fast");
-  // TGraphAsymmErrors* gbg_ht_MHT500_0b_7j = GetBGErr("HT_MHT500_0b_7j", hdata_obs_ht_MHT500_0b_7j, f_lostlep, f_hadtau, f_qcd, f_znn);
-  // TGraphAsymmErrors* gdata_obs_ht_MHT500_0b_7j = GetGDataObs(hdata_obs_ht_MHT500_0b_7j);
-  // MakePlot("T5qqqqVV-projection", gdata_obs_ht_MHT500_0b_7j, gbg_ht_MHT500_0b_7j, hdata_obs_ht_MHT500_0b_7j,
-  // 	   hlostlep_ht_MHT500_0b_7j, hhadtau_ht_MHT500_0b_7j, hqcd_ht_MHT500_0b_7j, hznn_ht_MHT500_0b_7j,
-  // 	   ht5qqqqVV_1300_50_ht_MHT500_0b_7j, ht5qqqqVV_1000_800_ht_MHT500_0b_7j,
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  // 	   false, 35, "N_{jet} #geq 7", "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV"); 
-
-  // TH1D* hdata_obs_ht_7j_0b = (TH1D*) f_data_obs->Get("hObsHT_7j_0b");
-  // TH1D* hlostlep_ht_7j_0b = (TH1D*) f_lostlep->Get("hPredHT_7j_0b");
-  // TH1D* hhadtau_ht_7j_0b = (TH1D*) f_hadtau->Get("hPredHT_7j_0b");
-  // TH1D* hqcd_ht_7j_0b = (TH1D*) f_qcd->Get("hPredHT_7j_0b");
-  // TH1D* hznn_ht_7j_0b = (TH1D*) f_znn->Get("hPredHT_7j_0b");
-  // TH1D* ht5qqqqVV_1300_50_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_1250_300_fast");
-  // TH1D* ht5qqqqVV_1000_800_ht_7j_0b = (TH1D*) f_sig->Get("hPredHT_nj-4-5_nb-1-1_mht-2-4_RA2bin_T5qqqqVV_750_600_fast");
-  // TGraphAsymmErrors* gbg_ht_7j_0b = GetBGErr("HT_7j_0b", hdata_obs_ht_7j_0b, f_lostlep, f_hadtau, f_qcd, f_znn);
-  // TGraphAsymmErrors* gdata_obs_ht_7j_0b = GetGDataObs(hdata_obs_ht_7j_0b);
-  // MakePlot("T5qqqqVV-projection-v2", gdata_obs_ht_7j_0b, gbg_ht_7j_0b, hdata_obs_ht_7j_0b, hlostlep_ht_7j_0b, hhadtau_ht_7j_0b, hqcd_ht_7j_0b, hznn_ht_7j_0b,
-  // 	   ht5qqqqVV_1300_50_ht_7j_0b, ht5qqqqVV_1000_800_ht_7j_0b,
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  // 	   false, 80, "N_{jet} #geq 7", "N_{b-jet} = 0", "H_{T}^{miss} > 300 GeV");
-
-  // TH1D* hdata_obs_NJets_0b = (TH1D*) f_data_obs->Get("hObsNJets_0b");
-  // TH1D* hlostlep_NJets_0b = (TH1D*) f_lostlep->Get("hPredNJets_0b");
-  // TH1D* hhadtau_NJets_0b = (TH1D*) f_hadtau->Get("hPredNJets_0b");
-  // TH1D* hqcd_NJets_0b = (TH1D*) f_qcd->Get("hPredNJets_0b");
-  // TH1D* hznn_NJets_0b = (TH1D*) f_znn->Get("hPredNJets_0b");
-  // TH1D* ht5qqqqVV_1300_50_NJets_0b = (TH1D*) f_sig->Get("hPredNJets_nb-1-1_box-7-11_RA2bin_T5qqqqVV_1300_50_fast");
-  // TH1D* ht5qqqqVV_1000_800_NJets_0b = (TH1D*) f_sig->Get("hPredNJets_nb-1-1_box-7-11_RA2bin_T5qqqqVV_750_600_fast");
-  // TGraphAsymmErrors* gbg_NJets_0b = GetBGErr("NJets_0b", hdata_obs_NJets_0b, f_lostlep, f_hadtau, f_qcd, f_znn);
-  // TGraphAsymmErrors* gdata_obs_NJets_0b = GetGDataObs(hdata_obs_NJets_0b);
-  // MakePlot("T5qqqqVV-projection-v3", gdata_obs_NJets_0b, gbg_NJets_0b, hdata_obs_NJets_0b,
-  // 	   hlostlep_NJets_0b, hhadtau_NJets_0b, hqcd_NJets_0b, hznn_NJets_0b,
-  // 	   ht5qqqqVV_1300_50_NJets_0b, ht5qqqqVV_1000_800_NJets_0b,
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1300 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  // 	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 750 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  // 	   false, 200, "N_{b-jet} = 0", "H_{T}^{miss} > 500 GeV");
-
-  TH1D* hdata_obs_ht_5j_2b = (TH1D*) f_data_obs->Get("hObsHT_MHT200_2b_5j");
-  TH1D* hlostlep_ht_5j_2b = (TH1D*) f_lostlep->Get("hPredHT_5j_2b");
-  TH1D* hhadtau_ht_5j_2b = (TH1D*) f_hadtau->Get("hPredHT_5j_2b");
-  TH1D* hqcd_ht_5j_2b = (TH1D*) f_qcd->Get("hPredHT_5j_2b");
-  TH1D* hznn_ht_5j_2b = (TH1D*) f_znn->Get("hPredHT_5j_2b");
-  TH1D* ht1tttt_1500_100_ht_5j_2b = (TH1D*) f_sig->Get("hPredHT_nj-2-5_nb-3-4_mht-1-4_RA2bin_T1tttt_1350_50_fast");
-  TH1D* ht1tttt_1200_800_ht_5j_2b = (TH1D*) f_sig->Get("hPredHT_nj-2-5_nb-3-4_mht-1-4_RA2bin_T1tttt_1025_600_fast");
-  TGraphAsymmErrors* gbg_ht_5j_2b = GetBGErr("HT_5j_2b", hdata_obs_ht_5j_2b, f_lostlep, f_hadtau, f_qcd, f_znn);
-  TGraphAsymmErrors* gdata_obs_ht_5j_2b = GetGDataObs(hdata_obs_ht_5j_2b);
-  MakePlot("T1tttt-projection-alphaT", gdata_obs_ht_5j_2b, gbg_ht_5j_2b, hdata_obs_ht_5j_2b, hlostlep_ht_5j_2b, hhadtau_ht_5j_2b, hqcd_ht_5j_2b, hznn_ht_5j_2b,
-  	   ht1tttt_1500_100_ht_5j_2b,  ht1tttt_1200_800_ht_5j_2b,
-  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1350 GeV, m_{#tilde{#chi}_{1}^{0}} = 50 GeV)",
-  	   "pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0} (m_{#tilde{g}} = 1025 GeV, m_{#tilde{#chi}_{1}^{0}} = 600 GeV)",
-  	   false, 450, "N_{jet} #geq 5", "N_{b-jet} #geq 2");
   
   return;
   

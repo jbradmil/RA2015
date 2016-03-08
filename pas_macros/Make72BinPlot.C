@@ -447,7 +447,7 @@ void Make72BinPlot() {
   tdrStyle->cd();
 
   gStyle->SetHatchesLineWidth(1);
-  gStyle->SetHatchesSpacing(1);
+  gStyle->SetHatchesSpacing(0.25);
 
 
   TFile* f_lostlep = new TFile("bg_hists/lostlep_hists.root", "read");
