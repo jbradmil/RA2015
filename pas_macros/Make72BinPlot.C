@@ -347,6 +347,9 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   pad2->cd();
   pad2->SetGridy(0);
 
+
+
+
   set_style(ratio, "data_obs");
   ratio->Draw("axis");
 
@@ -372,6 +375,20 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   ratiounity->Draw();
   ratiogerr->Draw("e2 same");
   ratioderr->Draw("p same");
+
+    // tl_njet->DrawLine(25.-0.5,ymin_bottom,25.-0.5,hbg_pred->GetMaximum()); 
+  // tl_njet->DrawLine(49.-0.5,ymin_bottom,49.-0.5,hbg_pred->GetMaximum());
+  tl_nb->DrawLine( 7.-0.5,-2.3, 7.-0.5,2.3); 
+  tl_nb->DrawLine(13.-0.5,-2.3,13.-0.5,2.3); 
+  tl_nb->DrawLine(19.-0.5,-2.3,19.-0.5,2.3); 
+  tl_njet->DrawLine(25.-0.5,-2.3,25.-0.5,2.3); 
+  tl_nb->DrawLine(31.-0.5,-2.3,31.-0.5,2.3); 
+  tl_nb->DrawLine(37.-0.5,-2.3,37.-0.5,2.3); 
+  tl_nb->DrawLine(43.-0.5,-2.3,43.-0.5,2.3); 
+  tl_njet->DrawLine(49.-0.5,-2.3,49.-0.5,2.3); 
+  tl_nb->DrawLine(55.-0.5,-2.3,55.-0.5,2.3); 
+  tl_nb->DrawLine(61.-0.5,-2.3,61.-0.5,2.3); 
+  tl_nb->DrawLine(67.-0.5,-2.3,67.-0.5,2.3);
 
   ratioderr->Print("all");
   
@@ -447,7 +464,7 @@ void Make72BinPlot() {
   tdrStyle->cd();
 
   gStyle->SetHatchesLineWidth(1);
-  gStyle->SetHatchesSpacing(0.25);
+  gStyle->SetHatchesSpacing(1.);
 
 
   TFile* f_lostlep = new TFile("bg_hists/lostlep_hists.root", "read");
