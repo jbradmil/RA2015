@@ -57,6 +57,11 @@ void set_style(TH1 * h, const TString& p, const bool dashes=false) {
     h->SetLineWidth(1);
     h->SetMarkerStyle(20);
     h->SetLineColor(1);
+  } else if (p == "sig_obs") {
+    h->SetMarkerSize(0.75);
+    h->SetLineWidth(1);
+    h->SetMarkerStyle(20);
+    h->SetLineColor(1);
   } else {
     if (dashes) h->SetFillStyle(3135);
     h->SetLineColor(kBlack);

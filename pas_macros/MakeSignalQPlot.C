@@ -91,7 +91,7 @@ TGraphAsymmErrors* GetBGErr(TString graph_name, TH1D* hdata_obs, TFile* f_lostle
 }
 
 void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmErrors* gerr, TH1D* hlostlep, TH1D* hhadtau, TH1D* hqcd, TH1D* hznn, 
-	      TH1D* h1, TH1D* h2,
+	      TH1D* h1, TH1D* h2, TH1D* h3, TH1D* h4, TH1D* h5, TH1D* h6,
 	      bool logy=false)
 {
 
@@ -134,29 +134,69 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   hbg_pred->SetFillColor(3002);
 
 
-  set_style(h1,"data_obs");
-  h1->SetLineColor(3004);
-  h1->SetMarkerColor(3004);
+  set_style(h1,"sig_obs");
+  h1->SetLineColor(2000);
+  h1->SetMarkerColor(2000);
   h1->SetMarkerStyle(20);
-  set_style(h2,"data_obs");
-  h2->SetLineColor(3004);
-  h2->SetMarkerColor(3004);
+  set_style(h2,"sig_obs");
+  h2->SetLineColor(2000);
+  h2->SetMarkerColor(2000);
   h2->SetMarkerStyle(24);
+  set_style(h3,"sig_obs");
+  h3->SetLineColor(2002);
+  h3->SetMarkerColor(2002);
+  h3->SetMarkerStyle(21);
+  set_style(h4,"sig_obs");
+  h4->SetLineColor(2002);
+  h4->SetMarkerColor(2002);
+  h4->SetMarkerStyle(25);
+  set_style(h5,"sig_obs");
+  h5->SetLineColor(2004);
+  h5->SetMarkerColor(2004);
+  h5->SetMarkerStyle(22);
+  set_style(h6,"sig_obs");
+  h6->SetLineColor(2004);
+  h6->SetMarkerColor(2004);
+  h6->SetMarkerStyle(26);
 
-  h1->Scale(2.153738/3);;
-  h2->Scale(2.153738/3);;
+  h1->Scale(2.262/3);
+  h2->Scale(2.262/3);
+  h3->Scale(2.262/3);
+  h4->Scale(2.262/3);
+  h5->Scale(2.262/3);
+  h6->Scale(2.262/3);
 
   TH1D * q1 = (TH1D *) h1->Clone("q1");
   TH1D * q2 = (TH1D *) h2->Clone("q2");
+  TH1D * q3 = (TH1D *) h1->Clone("q3");
+  TH1D * q4 = (TH1D *) h2->Clone("q4");
+  TH1D * q5 = (TH1D *) h1->Clone("q5");
+  TH1D * q6 = (TH1D *) h2->Clone("q6");
 
-  set_style(q1,"data_obs");
-  q1->SetLineColor(3004);
-  q1->SetMarkerColor(3004);
+  set_style(q1,"sig_obs");
+  q1->SetLineColor(2000);
+  q1->SetMarkerColor(2000);
   q1->SetMarkerStyle(20);
-  set_style(q2,"data_obs");
-  q2->SetLineColor(3004);
-  q2->SetMarkerColor(3004);
+  set_style(q2,"sig_obs");
+  q2->SetLineColor(2000);
+  q2->SetMarkerColor(2000);
   q2->SetMarkerStyle(24);
+  set_style(q3,"sig_obs");
+  q3->SetLineColor(2002);
+  q3->SetMarkerColor(2002);
+  q3->SetMarkerStyle(21);
+  set_style(q4,"sig_obs");
+  q4->SetLineColor(2002);
+  q4->SetMarkerColor(2002);
+  q4->SetMarkerStyle(25);
+  set_style(q5,"sig_obs");
+  q5->SetLineColor(2004);
+  q5->SetMarkerColor(2004);
+  q5->SetMarkerStyle(22);
+  set_style(q6,"sig_obs");
+  q6->SetLineColor(2004);
+  q6->SetMarkerColor(2004);
+  q6->SetMarkerStyle(26);
 
 
   htemp->SetStats(0);
@@ -184,27 +224,39 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
     q2->SetBinContent(bin+1, GetQ(h2->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
     q2->SetBinError(bin+1, 0);
     h2->SetBinError(bin+1, 0);
+    q3->SetBinContent(bin+1, GetQ(h3->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
+    q3->SetBinError(bin+1, 0);
+    h3->SetBinError(bin+1, 0);
+    q4->SetBinContent(bin+1, GetQ(h4->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
+    q4->SetBinError(bin+1, 0);
+    h4->SetBinError(bin+1, 0);
+    q5->SetBinContent(bin+1, GetQ(h5->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
+    q5->SetBinError(bin+1, 0);
+    h5->SetBinError(bin+1, 0);
+    q6->SetBinContent(bin+1, GetQ(h6->GetBinContent(bin+1), hbg_pred->GetBinContent(bin+1)));
+    q6->SetBinError(bin+1, 0);
+    h6->SetBinError(bin+1, 0);
   }
  
   // Setup legends                                                                                                                                                                                                                                                         
   TLegend * leg1 = new TLegend(0.37, 0.5, 0.77, 0.77);
   set_style(leg1,0.025);
-  leg1->AddEntry(h1, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
-  //leg1->AddEntry(ht1bbbb_1500_100, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1500 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
-  // leg1->AddEntry(ht1qqqq_1400_100, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
+  leg1->AddEntry(h1, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1500 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
+  leg1->AddEntry(h3, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1500 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
+  leg1->AddEntry(h5, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1400 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)}", "p");
 
   TLegend * leg2 = new TLegend(0.7, 0.5, 0.94, 0.77);
   set_style(leg2,0.025);
-  leg2->AddEntry(h2, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q}V #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
-  // leg2->AddEntry(ht1bbbb_1000_900, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 900 GeV)}", "p");
-  // leg2->AddEntry(ht1qqqq_1000_800, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
+  leg2->AddEntry(h2, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow t#bar{t} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1200 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
+  leg2->AddEntry(h4, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow b#bar{b} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 900 GeV)}", "p");
+  leg2->AddEntry(h6, "#splitline{pp #rightarrow #tilde{g}#tilde{g}, #tilde{g} #rightarrow q#bar{q} #tilde{#chi}_{1}^{0}}{(m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 800 GeV)}", "p");
 
-  TLegend * leg3 = new TLegend(0.7, 0.68, 0.94, 0.78);
-  set_style(leg3,0.035);
+  TLegend * leg3 = new TLegend(0.25, 0.57, 0.5, 0.67);
+  set_style(leg3,0.025);
   leg3->AddEntry(hbg_pred, "Total BG", "f");
 
-  TLegend * leg4 = new TLegend(0.37, 0.68, 0.74, 0.78);
-  set_style(leg4,0.035);
+  TLegend * leg4 = new TLegend(0.15, 0.57, 0.25, 0.67);
+  set_style(leg4,0.025);
   leg4->AddEntry(gdata_obs, "Data", "pes");
 
   
@@ -293,10 +345,10 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   cout << "Draw hists..." << endl;
   h1->Draw("p,same");
   h2->Draw("p,same");
-  // ht1bbbb_1500_100->Draw("p,same");
-  // ht1bbbb_1000_900->Draw("p,same");
-  // ht1qqqq_1400_100->Draw("p,same");
-  // ht1qqqq_1000_800->Draw("p,same");
+  h3->Draw("p,same");
+  h4->Draw("p,same");
+  h5->Draw("p,same");
+  h6->Draw("p,same");
 
 
   float ymax_top = hbg_pred->GetMaximum();
@@ -329,6 +381,8 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   ttext_njet->DrawLatex(37.-0.5 , ymax_top/4. , "7 #leq N_{#scale[0.2]{ }jet} #leq 8");
   ttext_njet->DrawLatex(61.-0.5 , ymax_top/4. , "N_{#scale[0.2]{ }jet} #geq 9");
 
+
+  
   // Nb separation lines
   TLine *tl_nb = new TLine();
   tl_nb->SetLineStyle(3);
@@ -366,14 +420,15 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   TLatex * latex = new TLatex();
   latex->SetNDC();
   latex->SetTextAlign(12);
-  latex->SetTextFont(62);
-  latex->SetTextSize(0.052);
-  latex->SetTextSize(0.04);
-  latex->SetTextSize(0.052);
+  latex->SetTextFont(42);
+  latex->SetTextColor(2000);
+  latex->SetTextSize(0.035);
+  latex->DrawLatex(0.5, 0.935, "arXiv:1602.06581");
 
+  
   // Luminosity information for scaling
-  double lumi     = 2.153738; // normaliza to this lumi (fb-1)
-  double lumi_ref = 2.153738; // normaliza to 3 (fb-1)
+  double lumi     = 2.26; // normaliza to this lumi (fb-1)
+  double lumi_ref = 2.26; // normaliza to 3 (fb-1)
 
   char tempname[200];
   TString line = "";
@@ -385,7 +440,7 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   int iPos=0;
     
   writeExtraText = true;
-  extraText   = "       Preliminary";
+  extraText   = "       Supplementary";
   TString lumi_sqrtS = line;
   
   TPaveText * pave = new TPaveText(0.18, 0.86, 0.4, 0.96, "brNDC");
@@ -405,6 +460,10 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   htemp->GetXaxis()->SetLabelSize(0.12);
   q1->Draw("p same");
   q2->Draw("p, same");
+  q3->Draw("p, same");
+  q4->Draw("p, same");
+  q5->Draw("p, same");
+  q6->Draw("p, same");
   // q_t1bbbb_1500_100->Draw("p, same");
   // q_t1bbbb_1000_900->Draw("p, same");
   // q_t1qqqq_1400_100->Draw("p, same");
@@ -412,6 +471,17 @@ void MakePlot(TString plot_title, TGraphAsymmErrors* gdata_obs, TGraphAsymmError
   qp1->Draw();
   qp2->Draw();
   qp3->Draw();
+  tl_nb->DrawLine( 7.-0.5,0, 7.-0.5,2.3); 
+  tl_nb->DrawLine(13.-0.5,0,13.-0.5,2.3); 
+  tl_nb->DrawLine(19.-0.5,0,19.-0.5,2.3); 
+  tl_njet->DrawLine(25.-0.5,0,25.-0.5,2.3); 
+  tl_nb->DrawLine(31.-0.5,0,31.-0.5,2.3); 
+  tl_nb->DrawLine(37.-0.5,0,37.-0.5,2.3); 
+  tl_nb->DrawLine(43.-0.5,0,43.-0.5,2.3); 
+  tl_njet->DrawLine(49.-0.5,0,49.-0.5,2.3); 
+  tl_nb->DrawLine(55.-0.5,0,55.-0.5,2.3); 
+  tl_nb->DrawLine(61.-0.5,0,61.-0.5,2.3); 
+  tl_nb->DrawLine(67.-0.5,0,67.-0.5,2.3);
 
   // // hratiogerr->GetXaxis()->SetRangeUser(0,6);
   //  hratiogerr->Draw("e2");
@@ -518,9 +588,13 @@ void MakeSignalQPlot() {
   hqcd->Sumw2();
   hznn->Sumw2();
 
-  TH1D* ht5qqqqVV_1400_100 = (TH1D*) f_sig->Get("RA2bin_T5qqqqVV_1400_100_fast");
-  TH1D* ht5qqqqVV_1000_800 = (TH1D*) f_sig->Get("RA2bin_T5qqqqVV_1000_800_fast");
-
+  TH1D* h1 = (TH1D*) f_sig->Get("RA2bin_T1tttt_1500_100_fast");
+  TH1D* h2 = (TH1D*) f_sig->Get("RA2bin_T1tttt_1200_800_fast");
+  TH1D* h3 = (TH1D*) f_sig->Get("RA2bin_T1bbbb_1500_100_fast");
+  TH1D* h4 = (TH1D*) f_sig->Get("RA2bin_T1bbbb_1000_900_fast");
+  TH1D* h5 = (TH1D*) f_sig->Get("RA2bin_T1qqqq_1400_100_fast");
+  TH1D* h6 = (TH1D*) f_sig->Get("RA2bin_T1qqqq_1000_800_fast");
+  
   TGraphAsymmErrors* glostlepstat = (TGraphAsymmErrors*) f_lostlep->Get("Graph;2");
   TGraphAsymmErrors* ghadtaustat = (TGraphAsymmErrors*) f_hadtau->Get("Graph;2");
   TGraphAsymmErrors* glostlepsyst = (TGraphAsymmErrors*) f_lostlep->Get("Graph;3");
@@ -580,7 +654,7 @@ void MakeSignalQPlot() {
   outfile = new TFile("test.root","recreate");
 
   cout << "Make plots..." << endl;
-  MakePlot("bins_all_signal_BG_data-v3-qqqqVV-only", gdata_obs, gbg, hlostlep, hhadtau, hqcd, hznn, ht5qqqqVV_1400_100, ht5qqqqVV_1000_800, true);
+  MakePlot("t1-signal-q-plot-72-bins", gdata_obs, gbg, hlostlep, hhadtau, hqcd, hznn, h1, h2, h3, h4, h5, h6, true);
 
   cout << gStyle->GetHatchesSpacing() << endl;
   cout << gStyle->GetHatchesLineWidth() << endl;
